@@ -1,0 +1,63 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.mycompany.myapp",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.4.1",
+    "applicationType": "monolith",
+    "baseName": "visionmongoelastickafka",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "mongodb",
+    "devDatabaseType": "mongodb",
+    "prodDatabaseType": "mongodb",
+    "searchEngine": "elasticsearch",
+    "messageBroker": "kafka",
+    "serviceDiscoveryType": false,
+    "buildTool": "gradle",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "ZGY1ZjAzYjFlNTBlMDk2YmI1YTY2Mjk5ZTA1ZDI0YWZhOTY0YjUzODJmOTQ5ZTQyOTdjNGQ3ODQ4YWJhY2RlNGRiM2NmNjlhODQwNGE5NzIxOTVlNmY5Mjc3MWUwNzBjMWQ1ZmNhZWY3NmU3ZjA5Njg3YTZmNmMxOGY2MDZjODA=",
+    "embeddableLaunchScript": false,
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "testFrameworks": [
+      "gatling",
+      "cucumber",
+      "protractor"
+    ],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": [
+      "en"
+    ],
+    "blueprints": [],
+    "appsFolders": [
+      "visionmongoelastickafka"
+    ],
+    "directoryPath": "../",
+    "clusteredDbApps": [
+      "visionmongoelastickafka"
+    ],
+    "dockerRepositoryName": "rohitergurala",
+    "dockerPushCommand": "docker push",
+    "kubernetesNamespace": "default",
+    "kubernetesServiceType": "LoadBalancer",
+    "ingressDomain": "",
+    "monitoring": "no",
+    "istio": false,
+    "consoleOptions": []
+  }
+}

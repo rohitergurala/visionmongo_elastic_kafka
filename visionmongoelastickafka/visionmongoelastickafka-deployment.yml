@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visionmongoelastickafka
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: visionmongoelastickafka
+      version: 'v1'
+  template:
+    metadata:
+      labels:
+        app: visionmongoelastickafka
+        version: 'v1'
+    spec:
+      initContainers:
+        - name: init-ds
+          image: busybox:latest
+          command:
+            - '/bin/sh'
+            - '-c'
+            - |
+              while true
+              do
+                rt=$(nc -z -w 1 visionmongoelastickafka-mongodb 27017)
+                if [ $? -eq 0 ]; then
+                  echo "DB is UP"
+                  break
+                fi
+                echo "DB is not yet reachable;sleep for 10s before retry"
+                sleep 10
+              done
+      containers:
+        - name: visionmongoelastickafka-app
+          image: rohitergurala/visionmongoelastickafka
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: secret
+            - name: SPRING_DATA_MONGODB_DATABASE
+              value: visionmongoelastickafka
+            - name: SPRING_DATA_MONGODB_URI
+              value: 'mongodb://visionmongoelastickafka-mongodb-0.visionmongoelastickafka-mongodb.default:27017,visionmongoelastickafka-mongodb-1.visionmongoelastickafka-mongodb.default:27017,visionmongoelastickafka-mongodb-2.visionmongoelastickafka-mongodb.default:27017'
+            - name: SPRING_DATA_JEST_URI
+              value: http://visionmongoelastickafka-elasticsearch.default.svc.cluster.local:9200
+            - name: SPRING_ELASTICSEARCH_REST_URIS
+              value: http://visionmongoelastickafka-elasticsearch.default.svc.cluster.local:9200
+            - name: KAFKA_CONSUMER_KEY_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+            - name: KAFKA_CONSUMER_VALUE_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+            - name: KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+              value: 'jhipster-kafka.default.svc.cluster.local:9092'
+            - name: KAFKA_CONSUMER_GROUP_ID
+              value: 'visionmongoelastickafka'
+            - name: KAFKA_CONSUMER_AUTO_OFFSET_RESET
+              value: 'earliest'
+            - name: KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+              value: 'jhipster-kafka.default.svc.cluster.local:9092'
+            - name: KAFKA_PRODUCER_KEY_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+            - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+            - name: JAVA_OPTS
+              value: ' -Xmx256m -Xms256m'
+          resources:
+            requests:
+              memory: '512Mi'
+              cpu: '500m'
+            limits:
+              memory: '1Gi'
+              cpu: '1'
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /management/health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /management/info
+              port: http
+            initialDelaySeconds: 120

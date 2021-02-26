@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: visionmongoelastickafka
+  namespace: default
+  labels:
+    app: visionmongoelastickafka
+spec:
+  selector:
+    app: visionmongoelastickafka
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 8080
